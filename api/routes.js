@@ -21,7 +21,11 @@ router.get('/tweets', async ctx => {
     return
   }
 
-  const tweets = await prisma.tweet.findMany()
+  const tweets = await prisma.tweet.findMany({
+    include: {
+      user: true
+    }
+  })
 
   ctx.body = tweets
 })

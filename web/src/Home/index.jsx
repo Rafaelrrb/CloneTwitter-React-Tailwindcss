@@ -1,5 +1,6 @@
 import { HeartIcon } from '@heroicons/react/outline'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const MAX_TWETT_CHAR = 140
 
@@ -63,17 +64,37 @@ function Tweet({ name, username, avatar, children }) {
 }
 
 export function Home() {
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbDN5YmdibjIwMDAwa2tueHA5bWJieXRkIiwiaWF0IjoxNjU0MzQxNzgxLCJleHAiOjE2NTQ0MjgxODF9.MQDfle7xmEmv6JuaV5bx1IoS909hZnGE-uYeyM0DNZk'
+  const [data, setData] = useState([])
+
+  async function getData() {
+    const res = await axios.get('http://localhost:9901/tweets', {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    })
+    setData(res.data)
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
     <>
       <TweetForm />
       <div>
-        <Tweet name="Rafael" username="Rafael" avatar="/src/avatar.png">
-          Meu 1 twitte
-        </Tweet>
-
-        <Tweet name="Bruno" username="Bruno" avatar="/src/avatar.png">
-          Meu 2 twitte
-        </Tweet>
+        {data.length &&
+          data.map(tweet => (
+            <Tweet
+              name={tweet.user.name}
+              username={tweet.user.username}
+              avatar="/src/avatar.png"
+            >
+              {tweet.text}
+            </Tweet>
+          ))}
       </div>
     </>
   )
