@@ -7,7 +7,7 @@
     "name": "Rafael Borba"
   },
   "scripts": {
-    "dev": "node server.js"
+    "dev": "node api/index.js"
   },
   "license": "MIT",
   "dependencies": {
